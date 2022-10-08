@@ -2,35 +2,45 @@
 
 <h1 align="center">
   <a href="https://git.io/typing-svg">
-    <img src="https://readme-typing-svg.herokuapp.com/?lines=Hello,+There!+👋;I'm+Krishna+Hendra+Wijaya....;Nice+to+meet+you!&center=true&size=30">
+    <img src="https://readme-typing-svg.herokuapp.com/?lines=Hello,+There!+👋;I am+Krishna+Hendra....;Nice+to+meet+you!&center=true&size=30">
   </a>
 </h1>
 
 <h5 align="center">
   <code>
-    <a href="https://www.linkedin.com/in/osmandurdag/" title="LinkedIn Profile"><img width="22" src="images/linkedin.svg"> LinkedIn</a></code>
-  <code><a href="https://www.hackerrank.com/zumrudu_anka" title="HackerRank Profile"><img width="22" src="images/hackerrank.png"> HackerRank</a></code>
-  <code><a href="https://stackoverflow.com/users/12578260/osman-durdag" title="Stack Overflow Profile"><img width="22" src="images/stackoverflow.svg"> Stack Overflow</a></code>
-  <code><a href="https://www.instagram.com/osman__durdag/" title="Instagram Profile"><img width="22" src="images/instagram.svg"> Instagram</a></code>
+  <a href="https://www.linkedin.com/in/osmandurdag/" title="LinkedIn Profile"><img width="22" src="images/linkedin.svg"> 
+  LinkedIn
+  </a>
+  </code>
+  <code>
+  <a href="https://www.hackerrank.com/zumrudu_anka" title="HackerRank Profile"><img width="22" src="images/hackerrank.png">     HackerRank
+  </a>
+  </code>
+  <code>
+  <a href="https://stackoverflow.com/users/12578260/osman-durdag" title="Stack Overflow Profile"><img width="22" src="images/stackoverflow.svg"> 
+  Stack Overflow
+  </a>
+  </code>
+  <code>
+  <a href="https://www.instagram.com/osman__durdag/" title="Instagram Profile"><img width="22" src="images/instagram.svg"> Instagram
+  </a></code>
 </h5>
 <br>
 <p align="center">
-  Hi, I'm Krishna Hendra Wijaya, Software Engineer from Indonesia
+  Hi, I'm Krishna Hendra Wijaya, Software Engineer from Malang, Indonesia.
   <br>
   <br>
-  🔬 I'm currently studying for a master's degree in Atatürk University Computer Engineering Department
+  🔬 I'm currently studying for a master's degree in Binus University Information System Department.
   <br>
-  🎓 I graduated from Black Sea Technical University Computer Engineering Department
+  🎓 I graduated from SMK Telkom Malang.
   <br>
-  🎓 I graduated from Erzurum İbrahim Hakkı Science High School
+  💻 I love writing code and learn anythings about it.
   <br>
-  💻 I love writing code and learn anythings about it
+  📚 I’m currently learning how to build E-Commerce Website with NodeJS and ReactJS.
   <br>
-  📚 I’m currently learning how to build E-Commerce Website with Django
+  💬 Ask me anything about from <a href="https://github.com/KrishnaHendra/KrishnaHendra/issues" title="Issues">Here</a>
   <br>
-  💬 Ask me anything about from <a href="https://github.com/zumrudu-anka/zumrudu-anka/issues" title="Issues">Here</a>
-  <br>
-  📫 How to reach me: <a href="mailto: osmandurdag@hotmail.com">osmandurdag@hotmail.com</a>
+  📫 How to reach me: <a href="mailto: krisnahendrawijaya@gmail.com">krisnahendrawijaya@gmail.com</a>
 </p>
 
 <hr>
@@ -116,7 +126,6 @@
 <h4 align="center">
   <a href="https://github.com/zumrudu-anka?tab=repositories" title="Show Repositories">🔎 Show More 🔍</a>
 </h4>
-
 
 <!--
 **zumrudu-anka/zumrudu-anka** is a ✨ _special_ ✨ repository because its `README.md` (this file) appears on your GitHub profile.
