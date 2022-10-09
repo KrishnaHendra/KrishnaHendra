@@ -124,8 +124,8 @@
   <a align="left" href="https://github.com/KrishnaHendra/pos" title="Point of Sales">
     <img align="left" height="115" src="https://github-readme-stats.vercel.app/api/pin/?username=KrishnaHendra&repo=pos&theme=react&border_color=61dafb&border_radius=10">
   </a>
-  <a align="right" href="https://github.com/KrishnaHendra/task-management" title="Task Management">
-    <img align="right" height="115" src="https://github-readme-stats.vercel.app/api/pin/?username=KrishnaHendra&repo=task-management&theme=react&border_color=61dafb&border_radius=10">
+  <a align="right" href="https://github.com/KrishnaHendra/fruit-store" title="Fruit Store">
+    <img align="right" height="115" src="https://github-readme-stats.vercel.app/api/pin/?username=KrishnaHendra&repo=fruit-store&theme=react&border_color=61dafb&border_radius=10">
   </a>
 </div>
 <br/><br/><br/><br/><br/><br/>
