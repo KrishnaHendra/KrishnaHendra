@@ -33,11 +33,13 @@
   <br>
   🔬 I'm currently studying for a master's degree in Binus University Information System Department.
   <br>
+  💻 I love writing code and learn anythings about it.
+  <!--
+  <br>
   🎓 I graduated from SMK Telkom Malang.
   <br>
-  💻 I love writing code and learn anythings about it.
-  <br>
   📚 I’m currently learning how to build E-Commerce Website with NodeJS and ReactJS.
+  -->
   <br>
   💬 Ask me anything about from <a href="https://github.com/KrishnaHendra/KrishnaHendra/issues" title="Issues">Here</a>
   <br>
