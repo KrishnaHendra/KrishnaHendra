@@ -100,7 +100,7 @@
 
 <hr>
 
-<h2 align="center">👨‍💻 My Repositories 👨‍💻</h2>
+<h2 align="center">👨‍💻 Repositories 👨‍💻</h2>
 <br>
 <div width="100%" align="center">
   <a align="left" href="https://github.com/KrishnaHendra/restaurant-app" title="restaurant-app">
@@ -130,7 +130,7 @@
 </div>
 <br/><br/><br/><br/><br/><br/>
 <h4 align="center">
-  <a href="https://github.com/KrishnaHendra?tab=repositories" title="Show Repositories">🔎 Show More Repositories 🔍</a>
+  <a href="https://github.com/KrishnaHendra?tab=repositories" title="Show Repositories">🔎 Show More 🔍</a>
 </h4>
 
 <!--
