@@ -28,7 +28,7 @@
 </h5>
 <br>
 <p align="center">
-  Hi, I'm Krishna Hendra Wijaya, Software Engineer from Malang, East Java - Indonesia.
+  Hi, I'm Krishna Hendra Wijaya, Software Engineer from Malang, East Java, Indonesia.
   <br>
   <br>
   🔬 I'm currently studying for a master's degree in Binus University Information System Department.
