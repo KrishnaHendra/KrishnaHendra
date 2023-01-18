@@ -7,11 +7,9 @@
 </h1>
 
 <h5 align="center">
-  <code>
   <a href="https://www.linkedin.com/in/krishna-hendra-wijaya-80b713184/" title="LinkedIn Profile"><img width="22" src="images/linkedin.svg"> 
   LinkedIn
   </a>
-  </code>
 <!--   <code>
   <a href="https://www.facebook.com/krisna.hendra.33/" title="Facebook Profile"><img width="22" src="images/facebook.png">     Facebook
   </a>
