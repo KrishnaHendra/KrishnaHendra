@@ -12,7 +12,7 @@
   LinkedIn
   </a>
   </code>
-  <code>
+<!--   <code>
   <a href="https://www.facebook.com/krisna.hendra.33/" title="Facebook Profile"><img width="22" src="images/facebook.png">     Facebook
   </a>
   </code>
@@ -24,7 +24,7 @@
   <code>
   <a href="https://www.instagram.com/krisnahendra_/" title="Instagram Profile"><img width="22" src="images/instagram.svg"> Instagram
   </a>
-  </code>
+  </code> -->
 </h5>
 <br>
 <p align="center">
