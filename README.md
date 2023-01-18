@@ -8,8 +8,12 @@
 
 <h5 align="center">
   <a href="https://www.linkedin.com/in/krishna-hendra-wijaya-80b713184/" title="LinkedIn Profile"><img width="22" src="images/linkedin.svg"> 
-  LinkedIn
+    LinkedIn
   </a>
+  <a href="https://www.instagram.com/krisnahendra_/" title="Instagram Profile"><img width="22" src="images/instagram.svg"> 
+    Instagram
+  </a>
+  
 <!--   <code>
   <a href="https://www.facebook.com/krisna.hendra.33/" title="Facebook Profile"><img width="22" src="images/facebook.png">     Facebook
   </a>
