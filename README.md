@@ -102,7 +102,7 @@
 
 <hr>
 
-<h2 align="center">👨‍💻 My Repository 👨‍💻</h2>
+<h2 align="center">👨‍💻 Repositories 👨‍💻</h2>
 <br>
 <div width="100%" align="center">
   <a align="left" href="https://github.com/KrishnaHendra/restaurant-app" title="restaurant-app">
