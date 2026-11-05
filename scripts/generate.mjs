@@ -35,11 +35,11 @@ const THEMES = {
 
 const TECH = [
     ['Languages', ['PHP', 'JavaScript', 'TypeScript', 'Dart']],
-    ['Frontend', ['React', 'Vite', 'Tailwind CSS', 'Sass', 'Webpack']],
-    ['Backend', ['Laravel', 'CodeIgniter', 'Node.js', 'Hapi', 'Express']],
-    ['Mobile', ['Flutter']],
-    ['Data', ['PostgreSQL', 'MySQL', 'Redis', 'RabbitMQ']],
-    ['Tools', ['Git', 'GitHub']],
+    ['Frontend', ['React', 'Next.js', 'Vite', 'Tailwind CSS', 'Sass', 'Webpack']],
+    ['Backend', ['Laravel', 'CodeIgniter', 'Node.js', 'NestJS', 'Express', 'Hapi', 'GraphQL']],
+    ['Mobile', ['Flutter', 'React Native']],
+    ['Data', ['PostgreSQL', 'MySQL', 'MongoDB', 'Redis', 'RabbitMQ', 'Prisma', 'Supabase']],
+    ['Tools', ['Git', 'GitHub', 'GitHub Actions', 'Docker', 'Vercel', 'Claude']],
 ];
 
 // Wording and stack are curated; star counts come from the API.
@@ -75,6 +75,7 @@ async function loadData() {
         if (batch.length < 100) break;
     }
     const own = repos.filter((r) => !r.fork);
+    const mainLanguage = {};
 
     // Counting repos, not bytes: bundled libraries would otherwise outweigh everything I wrote.
     const repoCounts = {};
@@ -82,6 +83,7 @@ async function loadData() {
         const languages = await api(`/repos/${LOGIN}/${repo.name}/languages`);
         const [main] = Object.entries(languages).filter(([name]) => !NOT_CODE.has(name)).sort((a, b) => b[1] - a[1]);
         if (main) repoCounts[main[0]] = (repoCounts[main[0]] || 0) + 1;
+        mainLanguage[repo.name] = main?.[0] ?? repo.language;
     }
 
     const graph = await api('/graphql', {
@@ -118,6 +120,9 @@ async function loadData() {
         since: new Date(user.created_at).getUTCFullYear(),
         stars: own.reduce((sum, r) => sum + r.stargazers_count, 0),
         starsByRepo: Object.fromEntries(repos.map((r) => [r.name, r.stargazers_count])),
+        projects: own.filter((r) => r.name !== LOGIN)
+            .sort((a, b) => b.pushed_at.localeCompare(a.pushed_at))
+            .map((r) => ({ name: r.name, url: r.html_url, text: r.description, language: mainLanguage[r.name], stars: r.stargazers_count })),
         contributions: calendar.totalContributions,
         weeks: calendar.weeks,
         longest,
@@ -369,6 +374,12 @@ function readmeTable(d) {
     return ['| Metric | Value |', '|---|--:|', ...rows.map(([k, v]) => `| ${k} | ${v} |`)].join('\n');
 }
 
+function projectsList(d) {
+    const cell = (s) => (s ? String(s).trim().replace(/\s+/g, ' ').replace(/\|/g, '\\|').replace(/</g, '&lt;') : '-');
+    const rows = d.projects.map((p) => `| [${cell(p.name)}](${p.url}) | ${cell(p.text)} | ${cell(p.language)} | ${p.stars} |`);
+    return [`<details>\n<summary>See all ${d.projects.length} projects</summary>\n`, '| Project | About | Main language | Stars |', '|---|---|---|--:|', ...rows, '\n</details>'].join('\n');
+}
+
 const data = await loadData();
 const files = [];
 for (const [mode, t] of Object.entries(THEMES)) {
@@ -380,13 +391,14 @@ for (const [mode, t] of Object.entries(THEMES)) {
 }
 const mailIcon = '<path d="M2 5.5A2.5 2.5 0 0 1 4.5 3h15A2.5 2.5 0 0 1 22 5.5v13a2.5 2.5 0 0 1-2.5 2.5h-15A2.5 2.5 0 0 1 2 18.5zm2.300-.300L12 11.2l7.700-6zM20 7.300l-8 6.2-8-6.2v11.2a.5.5 0 0 0 .5.5h15a.5.5 0 0 0 .5-.5z"/>';
 const linkedInIcon = '<path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 1 1 0-4.124 2.062 2.062 0 0 1 0 4.124zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0z"/>';
-files.push(button('linkedin', 'LinkedIn', linkedInIcon), button('instagram', 'Instagram', `<path d="${ICONS.Instagram.path}"/>`), button('email', 'Email me', mailIcon));
+const globeIcon = '<path fill-rule="evenodd" d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20zm7.93 9h-3.47a15.6 15.6 0 0 0-1.2-5.37A8.02 8.02 0 0 1 19.93 11zM12 4.04c.9 1.1 2.100 3.500 2.450 6.960h-4.900C9.900 7.540 11.100 5.140 12 4.040zM4.070 13h3.470c.1 1.900.530 3.760 1.200 5.370A8.020 8.020 0 0 1 4.070 13zm3.470-2H4.070a8.020 8.020 0 0 1 4.670-5.370A15.600 15.600 0 0 0 7.540 11zM12 19.960c-.9-1.100-2.100-3.500-2.450-6.960h4.900c-.35 3.460-1.550 5.860-2.450 6.960zm3.260-1.590c.67-1.610 1.100-3.470 1.200-5.370h3.470a8.020 8.020 0 0 1-4.670 5.370z"/>';
+files.push(button('website', 'Website', globeIcon), button('linkedin', 'LinkedIn', linkedInIcon), button('instagram', 'Instagram', `<path d="${ICONS.Instagram.path}"/>`), button('email', 'Email me', mailIcon));
 
 mkdirSync(OUT, { recursive: true });
 for (const [name, content] of files) writeFileSync(join(OUT, name), content);
 
 const readmePath = join(ROOT, 'README.md');
-const readme = readFileSync(readmePath, 'utf8');
-writeFileSync(readmePath, readme.replace(/(<!-- stats:start -->)[\s\S]*?(<!-- stats:end -->)/, `$1\n\n${readmeTable(data)}\n\n$2`));
+const fill = (text, name, content) => text.replace(new RegExp(`(<!-- ${name}:start -->)[\\s\\S]*?(<!-- ${name}:end -->)`), (_, start, end) => `${start}\n\n${content}\n\n${end}`);
+writeFileSync(readmePath, fill(fill(readFileSync(readmePath, 'utf8'), 'stats', readmeTable(data)), 'projects', projectsList(data)));
 
 console.log(JSON.stringify({ files: files.length, contributions: data.contributions, longest: data.longest, current: data.current, repos: data.repos, stars: data.stars, languages: data.languages }));
