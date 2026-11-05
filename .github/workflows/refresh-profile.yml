@@ -1,0 +1,40 @@
+name: Refresh profile stats
+
+on:
+  schedule:
+    - cron: '17 1 * * *'
+  workflow_dispatch:
+  # Proves the generator still works before a change is merged. Nothing is committed from here.
+  pull_request:
+    paths:
+      - 'scripts/**'
+      - '.github/workflows/refresh-profile.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Generate images
+        run: node scripts/generate.mjs
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+      - name: Commit if anything changed
+        if: github.event_name != 'pull_request'
+        run: |
+          git add assets README.md
+          if git diff --cached --quiet; then
+            echo "No changes"
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git commit -m "chore: refresh profile stats"
+          git push
