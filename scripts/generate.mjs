@@ -42,19 +42,6 @@ const TECH = [
     ['Tools', ['Git', 'GitHub', 'GitHub Actions', 'Docker', 'Vercel', 'Claude']],
 ];
 
-// Wording and stack are curated; star counts come from the API.
-const PROJECTS = [
-    { repo: 'notes-app', title: 'Notes API', text: 'Backend for a notes app, with JWT auth, background jobs over a message queue, caching and file storage.', tags: ['Hapi', 'PostgreSQL', 'Redis', 'RabbitMQ'] },
-    { repo: 'gapyeong-loyalty-app', title: 'Gapyeong Loyalty', text: 'Loyalty app for Gapyeong Korean BBQ, a Korean BBQ restaurant group in Indonesia.', tags: ['Laravel', 'PHP'] },
-    { repo: 'citycareapp', title: 'CityCare', text: 'Installable web app that lets residents report damaged public facilities directly to the city government.', tags: ['JavaScript', 'PWA', 'Leaflet'] },
-    { repo: 'KamoFlutter', title: 'Kantin Moklet', text: 'Mobile app for digital payments at the Moklet school canteen.', tags: ['Flutter', 'Dart'] },
-    { repo: 'simasko', title: 'SIMASKO', text: 'Information system for a Balai Latihan Kerja, an Indonesian vocational training center.', tags: ['Laravel', 'PHP'] },
-    { repo: 'personal-notes-app', title: 'Personal Notes', text: 'Notes app with archiving and quick search, built with modern React.', tags: ['React', 'Vite'] },
-];
-
-// Page markup dwarfs real code in these repos, so it would hide the language each one is really written in.
-const NOT_CODE = new Set(['HTML', 'CSS', 'SCSS', 'Less', 'EJS', 'Blade', 'MDX', 'TSQL', 'Hack', 'TeX']);
-
 /* ---------- data ---------- */
 
 async function api(path, options = {}) {
@@ -75,16 +62,6 @@ async function loadData() {
         if (batch.length < 100) break;
     }
     const own = repos.filter((r) => !r.fork);
-    const mainLanguage = {};
-
-    // Counting repos, not bytes: bundled libraries would otherwise outweigh everything I wrote.
-    const repoCounts = {};
-    for (const repo of own) {
-        const languages = await api(`/repos/${LOGIN}/${repo.name}/languages`);
-        const [main] = Object.entries(languages).filter(([name]) => !NOT_CODE.has(name)).sort((a, b) => b[1] - a[1]);
-        if (main) repoCounts[main[0]] = (repoCounts[main[0]] || 0) + 1;
-        mainLanguage[repo.name] = main?.[0] ?? repo.language;
-    }
 
     const graph = await api('/graphql', {
         method: 'POST',
@@ -110,24 +87,14 @@ async function loadData() {
         else if (i !== days.length - 1) break;
     }
 
-    const ranked = Object.entries(repoCounts).sort((a, b) => b[1] - a[1]);
-    const languages = ranked.slice(0, 5).map(([name, count]) => ({ name, count }));
-    const rest = ranked.slice(5).reduce((sum, [, count]) => sum + count, 0);
-    if (rest > 0) languages.push({ name: 'Other', count: rest });
-
     return {
         repos: user.public_repos,
         since: new Date(user.created_at).getUTCFullYear(),
         stars: own.reduce((sum, r) => sum + r.stargazers_count, 0),
-        starsByRepo: Object.fromEntries(repos.map((r) => [r.name, r.stargazers_count])),
-        projects: own.filter((r) => r.name !== LOGIN)
-            .sort((a, b) => b.pushed_at.localeCompare(a.pushed_at))
-            .map((r) => ({ name: r.name, url: r.html_url, text: r.description, language: mainLanguage[r.name], stars: r.stargazers_count })),
         contributions: calendar.totalContributions,
         weeks: calendar.weeks,
         longest,
         current,
-        languages,
     };
 }
 
@@ -324,42 +291,6 @@ function activity(d, t) {
     return svg(width, base + 22, `Contribution calendar: ${num(d.contributions)} contributions in the last 12 months.`, body);
 }
 
-function languages(d, t) {
-    const width = 1000, rowHeight = 34, y0 = 56, left = 130, barMax = width - left - 92;
-    const top = Math.max(...d.languages.map((l) => l.count));
-    const rows = d.languages.map((lang, i) => {
-        const y = y0 + i * rowHeight, w = Math.max(8, (lang.count / top) * barMax);
-        return `${label(22, y + 13, lang.name, t, 14, `fill-opacity="1"`).replace(t.muted, t.ink)}
-            <path d="M${left} ${y + 2}h${w - 4}a4 4 0 0 1 4 4v4a4 4 0 0 1-4 4h-${w - 4}z" fill="${t.accent}"/>
-            <text x="${left + w + 10}" y="${y + 13}" fill="${t.muted}" font-family="${SANS}" font-size="13">${lang.count}</text>`;
-    }).join('');
-    const height = y0 + d.languages.length * rowHeight + 42;
-    const body = `${panel(width, height, t)}
-        <text x="22" y="32" fill="${t.ink}" font-family="${SANS}" font-weight="600" font-size="15">Main language by repository</text>
-        ${rows}${label(22, height - 18, 'Number of public repositories, by the main language in each. Forks and markup such as HTML and CSS are excluded.', t, 12)}`;
-    return svg(width, height, `Main language by repository: ${d.languages.map((l) => `${l.name} ${l.count}`).join(', ')}.`, body);
-}
-
-function projectCard(project, stars, t) {
-    const width = 490, height = 196;
-    const lines = wrap(project.text, 54).slice(0, 3);
-    let x = 22;
-    const tags = project.tags.map((tag) => {
-        const w = 20 + tag.length * 7.2;
-        const pill = `<g transform="translate(${x} 150)"><rect width="${w}" height="26" rx="13" fill="none" stroke="${t.line}"/><text x="${w / 2}" y="17.5" text-anchor="middle" fill="${t.muted}" font-family="ui-monospace,Menlo,Consolas,monospace" font-size="12">${esc(tag)}</text></g>`;
-        x += w + 7;
-        return pill;
-    }).join('');
-    const star = stars > 0
-        ? `<path transform="translate(${width - 58} 23) scale(.75)" fill="${t.muted}" d="M12 2l2.950 6.5 7.050.8-5.250 4.750 1.450 7L12 17.5 5.8 21.050l1.450-7L2 9.300l7.050-.8z"/><text x="${width - 34}" y="37" fill="${t.muted}" font-family="${SANS}" font-size="14">${stars}</text>`
-        : '';
-    const body = `${panel(width, height, t)}
-        <rect x="22" y="24" width="4" height="20" rx="2" fill="${t.accent}"/>
-        <text x="36" y="41" fill="${t.ink}" font-family="D,${SANS}" font-weight="700" font-size="22">${esc(project.title)}</text>${star}
-        ${lines.map((line, i) => `<text x="22" y="${77 + i * 21}" fill="${t.muted}" font-family="${SANS}" font-size="14.5">${esc(line)}</text>`).join('')}${tags}`;
-    return svg(width, height, `${project.title}: ${project.text}`, body, DISPLAY_FONT);
-}
-
 /* ---------- output ---------- */
 
 function readmeTable(d) {
@@ -369,25 +300,15 @@ function readmeTable(d) {
         ['Current streak', `${d.current} days`],
         ['Public repositories', num(d.repos)],
         ['Stars earned', num(d.stars)],
-        ...d.languages.map((l) => [`Repositories in ${l.name}`, l.count]),
     ];
     return ['| Metric | Value |', '|---|--:|', ...rows.map(([k, v]) => `| ${k} | ${v} |`)].join('\n');
-}
-
-function projectsList(d) {
-    const cell = (s) => (s ? String(s).trim().replace(/\s+/g, ' ').replace(/\|/g, '\\|').replace(/</g, '&lt;') : '-');
-    const rows = d.projects.map((p) => `| [${cell(p.name)}](${p.url}) | ${cell(p.text)} | ${cell(p.language)} | ${p.stars} |`);
-    return [`<details>\n<summary>See all ${d.projects.length} projects</summary>\n`, '| Project | About | Main language | Stars |', '|---|---|---|--:|', ...rows, '\n</details>'].join('\n');
 }
 
 const data = await loadData();
 const files = [];
 for (const [mode, t] of Object.entries(THEMES)) {
     files.push([`hero-${mode}.svg`, hero(t)], [`tech-${mode}.svg`, techStack(t)], [`stats-${mode}.svg`, stats(data, t)],
-        [`activity-${mode}.svg`, activity(data, t)], [`languages-${mode}.svg`, languages(data, t)]);
-    for (const project of PROJECTS) {
-        files.push([`project-${project.repo}-${mode}.svg`, projectCard(project, data.starsByRepo[project.repo] ?? 0, t)]);
-    }
+        [`activity-${mode}.svg`, activity(data, t)]);
 }
 const mailIcon = '<path d="M2 5.5A2.5 2.5 0 0 1 4.5 3h15A2.5 2.5 0 0 1 22 5.5v13a2.5 2.5 0 0 1-2.5 2.5h-15A2.5 2.5 0 0 1 2 18.5zm2.300-.300L12 11.2l7.700-6zM20 7.300l-8 6.2-8-6.2v11.2a.5.5 0 0 0 .5.5h15a.5.5 0 0 0 .5-.5z"/>';
 const linkedInIcon = '<path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 1 1 0-4.124 2.062 2.062 0 0 1 0 4.124zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0z"/>';
@@ -399,6 +320,6 @@ for (const [name, content] of files) writeFileSync(join(OUT, name), content);
 
 const readmePath = join(ROOT, 'README.md');
 const fill = (text, name, content) => text.replace(new RegExp(`(<!-- ${name}:start -->)[\\s\\S]*?(<!-- ${name}:end -->)`), (_, start, end) => `${start}\n\n${content}\n\n${end}`);
-writeFileSync(readmePath, fill(fill(readFileSync(readmePath, 'utf8'), 'stats', readmeTable(data)), 'projects', projectsList(data)));
+writeFileSync(readmePath, fill(readFileSync(readmePath, 'utf8'), 'stats', readmeTable(data)));
 
-console.log(JSON.stringify({ files: files.length, contributions: data.contributions, longest: data.longest, current: data.current, repos: data.repos, stars: data.stars, languages: data.languages }));
+console.log(JSON.stringify({ files: files.length, contributions: data.contributions, longest: data.longest, current: data.current, repos: data.repos, stars: data.stars }));
