@@ -58,9 +58,9 @@ const krishna = {
 
 | Metric | Value |
 |---|--:|
-| Contributions, last 12 months | 2,331 |
+| Contributions, last 12 months | 2,359 |
 | Longest streak | 19 days |
-| Current streak | 0 days |
+| Current streak | 2 days |
 | Public repositories | 43 |
 | Stars earned | 18 |
 
