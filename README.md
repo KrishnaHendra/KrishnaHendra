@@ -60,7 +60,7 @@ const krishna = {
 |---|--:|
 | Contributions, last 12 months | 2,587 |
 | Longest streak | 19 days |
-| Current streak | 5 days |
+| Current streak | 0 days |
 | Public repositories | 43 |
 | Stars earned | 18 |
 
